@@ -11,16 +11,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download libpng headers
+      - name: Download libpng headers from MDLuffy666
         run: |
           curl -L -o libpng.zip https://github.com/MDLuffy666/libpng-1.2.5/archive/refs/heads/master.zip
           unzip libpng.zip
-          cp libpng-1.2.5-master/png*.h .
+          cp libpng-1.2.5-master/*.h .
+
+      - name: Download precompiled libpng + zlib
+        run: |
+          curl -L -o libpng-bin.zip https://download.sourceforge.net/libpng/libpng16-16.39.0-win64.zip
+          unzip libpng-bin.zip
+          cp lib/*.a .
+          cp lib/*.dll .
 
       - name: Build binaries using Makefile
         shell: bash
         run: |
-          make CFLAGS="-I$(pwd)" LDFLAGS=""
+          make
 
       - name: Upload compiled binaries
         uses: actions/upload-artifact@v4
@@ -29,3 +36,4 @@ jobs:
           path: |
             bmp2png.exe
             png2bmp.exe
+            *.dll
