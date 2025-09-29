@@ -1,6 +1,5 @@
-name: Build BmpToPng
+name: Build BmpToPng and PngToBmp
 
-# Permite ejecutar manualmente desde la interfaz de GitHub
 on:
   workflow_dispatch:
 
@@ -10,20 +9,28 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Setup MSVC Build Tools
-        uses: microsoft/setup-msbuild@v1
+      - name: Install MinGW
+        uses: msys2/setup-msys2@v2
         with:
-          vs-version: latest
+          update: true
+          install: mingw-w64-x86_64-gcc
 
-      - name: Compile BmpToPng
-        shell: cmd
+      - name: Compile bmp2png.exe
+        shell: bash
         run: |
-          cl /EHsc /Fe:BmpToPng.exe *.c
+          gcc bmp2png.c common.c -o bmp2png.exe
 
-      - name: Upload compiled binary
+      - name: Compile png2bmp.exe
+        shell: bash
+        run: |
+          gcc png2bmp.c common.c -o png2bmp.exe
+
+      - name: Upload binaries
         uses: actions/upload-artifact@v4
         with:
-          name: BmpToPng-exe
-          path: BmpToPng.exe
+          name: BmpToPng-binaries
+          path: |
+            bmp2png.exe
+            png2bmp.exe
