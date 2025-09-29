@@ -1,4 +1,4 @@
-name: Build png2bmp
+name: Build BmpToPng
 
 on:
   push:
@@ -10,20 +10,25 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-    - name: Install Visual Studio Build Tools
-      uses: microsoft/setup-msbuild@v1
-      with:
-        vs-version: latest
+      - name: Install MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
 
-    - name: Build png2bmp
-      shell: cmd
-      run: |
-        cl /EHsc /Fe:png2bmp.exe *.c
+      - name: Install build tools
+        run: |
+          pacman -S --noconfirm make mingw-w64-x86_64-gcc
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: png2bmp-exe
-        path: png2bmp.exe
+      - name: Build BmpToPng
+        shell: bash
+        run: |
+          make
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: BmpToPng-exe
+          path: BmpToPng.exe
