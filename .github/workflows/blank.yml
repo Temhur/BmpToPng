@@ -11,12 +11,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install MinGW
-        run: |
-          choco install mingw -y
-          refreshenv
+      - name: Install MSYS2 + MinGW + libpng + zlib
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-libpng mingw-w64-x86_64-zlib
 
-      - name: Download libpng headers from MDLuffy666
+      - name: Copy libpng headers from MDLuffy666
         run: |
           curl -L -o libpng.zip https://github.com/MDLuffy666/libpng-1.2.5/archive/refs/heads/master.zip
           unzip libpng.zip
