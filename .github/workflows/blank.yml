@@ -1,0 +1,29 @@
+name: Build png2bmp
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install Visual Studio Build Tools
+      uses: microsoft/setup-msbuild@v1
+      with:
+        vs-version: latest
+
+    - name: Build png2bmp
+      shell: cmd
+      run: |
+        cl /EHsc /Fe:png2bmp.exe *.c
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: png2bmp-exe
+        path: png2bmp.exe
