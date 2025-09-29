@@ -1,9 +1,8 @@
 name: Build BmpToPng
 
+# Permite ejecutar manualmente desde la interfaz
 on:
-  push:
-    branches: [ main ]
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   build-windows:
