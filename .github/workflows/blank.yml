@@ -11,6 +11,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Fix png.h include
+        shell: bash
+        run: |
+          sed -i 's/#include "png.h"/#include <png.h>/' common.h
+
       - name: Install MSYS2 + GCC + Make + Libraries
         uses: msys2/setup-msys2@v2
         with:
@@ -20,7 +25,7 @@ jobs:
       - name: Build binaries using Makefile
         shell: bash
         run: |
-          make
+          make CFLAGS="-I/mingw64/include" LDFLAGS="-L/mingw64/lib"
 
       - name: Upload compiled binaries
         uses: actions/upload-artifact@v4
