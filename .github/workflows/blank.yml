@@ -1,4 +1,4 @@
-name: Build BmpToPng and PngToBmp
+name: Build BmpToPng
 
 on:
   workflow_dispatch:
@@ -15,19 +15,14 @@ jobs:
         uses: msys2/setup-msys2@v2
         with:
           update: true
-          install: mingw-w64-x86_64-gcc
+          install: mingw-w64-x86_64-gcc make
 
-      - name: Compile bmp2png.exe
+      - name: Build binaries using Makefile
         shell: bash
         run: |
-          gcc bmp2png.c common.c -o bmp2png.exe
+          make
 
-      - name: Compile png2bmp.exe
-        shell: bash
-        run: |
-          gcc png2bmp.c common.c -o png2bmp.exe
-
-      - name: Upload binaries
+      - name: Upload compiled binaries
         uses: actions/upload-artifact@v4
         with:
           name: BmpToPng-binaries
