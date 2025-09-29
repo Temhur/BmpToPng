@@ -11,18 +11,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install MinGW
+        run: |
+          choco install mingw -y
+          refreshenv
+
       - name: Download libpng headers from MDLuffy666
         run: |
           curl -L -o libpng.zip https://github.com/MDLuffy666/libpng-1.2.5/archive/refs/heads/master.zip
           unzip libpng.zip
           cp libpng-1.2.5-master/*.h .
-
-      - name: Download precompiled libpng + zlib
-        run: |
-          curl -L -o libpng-bin.zip https://download.sourceforge.net/libpng/libpng16-16.39.0-win64.zip
-          unzip libpng-bin.zip
-          cp lib/*.a .
-          cp lib/*.dll .
 
       - name: Build binaries using Makefile
         shell: bash
@@ -36,4 +34,3 @@ jobs:
           path: |
             bmp2png.exe
             png2bmp.exe
-            *.dll
