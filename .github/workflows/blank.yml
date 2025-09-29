@@ -11,16 +11,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download prebuilt libpng headers
+      - name: Download libpng headers
         run: |
-          curl -L -o libpng.zip https://download.sourceforge.net/gnuwin32/libpng-1.2.5-bin.zip
-          unzip libpng.zip -d libpng
-          cp libpng/include/png*.h .
+          curl -L -o libpng.zip https://github.com/MDLuffy666/libpng-1.2.5/archive/refs/heads/master.zip
+          unzip libpng.zip
+          cp libpng-1.2.5-master/png*.h .
 
       - name: Build binaries using Makefile
         shell: bash
         run: |
-          make
+          make CFLAGS="-I$(pwd)" LDFLAGS=""
 
       - name: Upload compiled binaries
         uses: actions/upload-artifact@v4
